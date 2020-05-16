@@ -1,4 +1,4 @@
-# &#x1f996;🦕🦕 Dino &#x1f995;
+# &#x1f996; Dino &#x1f995;
 
 [![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](http://unlicense.org/)
 
