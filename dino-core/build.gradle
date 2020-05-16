@@ -1,0 +1,14 @@
+plugins {
+    id 'java-test-fixtures'
+}
+
+dependencies {
+    // import BOM
+    testFixturesImplementation platform("org.junit:junit-bom:$junit_bom_version")
+
+    testFixturesImplementation 'org.junit.jupiter:junit-jupiter-api'
+    testFixturesImplementation "org.assertj:assertj-core:$assertj_version"
+}
+
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11

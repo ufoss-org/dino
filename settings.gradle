@@ -1,0 +1,18 @@
+pluginManagement {
+    plugins {
+        id 'net.researchgate.release' version "$release_plugin_version"
+        id 'org.javamodularity.moduleplugin' version "$java_module_plugin_version"
+        id "me.champeau.gradle.jmh" version "$jmh_plugin_version"
+    }
+}
+
+rootProject.name = 'dino'
+
+include 'dino-concurrent'
+include 'dino-core'
+include 'dino-core-jdk14'
+include 'dino-core-jdk15'
+//include 'dino-tcp'
+//include 'dino-transfer'
+
+//include 'benchmarks'

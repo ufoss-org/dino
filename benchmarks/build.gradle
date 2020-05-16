@@ -1,0 +1,43 @@
+plugins {
+    id 'me.champeau.gradle.jmh'
+}
+
+sourceCompatibility = JavaVersion.VERSION_15
+targetCompatibility = JavaVersion.VERSION_15
+
+// It is better to use the following to run benchmarks, otherwise you may get unexpected errors:
+// ./gradlew -Dorg.gradle.java.home=/home/frederic/dev-tools/jdks/jdk-15 --no-daemon cleanJmhJar jmh
+// gradlew -Dorg.gradle.java.home=C:\\dev\\jdk\\jdk-15 --no-daemon cleanJmhJar jmh
+
+jmh {
+    jmhVersion = '1.21'
+    duplicateClassesStrategy = DuplicatesStrategy.EXCLUDE
+    failOnError = true
+    resultFormat = 'CSV'
+    jvmArgs = [
+            '--module-path', '/home/frederic/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/1.7.30/b5a4b6d16ab13e34a88fae84c35cd5d68cac922c/slf4j-api-1.7.30.jar:/home/frederic/.gradle/caches/modules-2/files-2.1/org.jetbrains/annotations/19.0.0/efbff6752f67a7c9de3e4251c086a88e23591dfd/annotations-19.0.0.jar:/home/frederic/.gradle/caches/modules-2/files-2.1/org.openjdk.jmh/jmh-generator-bytecode/1.21/6a52cbbd7f5e2cf7a0163984241750cdd6cb1257/jmh-generator-bytecode-1.21.jar:/home/frederic/.gradle/caches/modules-2/files-2.1/org.openjdk.jmh/jmh-generator-asm/1.21/670ffd88255faf81ad294f0d8a9eba0292f5a554/jmh-generator-asm-1.21.jar:/home/frederic/.gradle/caches/modules-2/files-2.1/org.openjdk.jmh/jmh-generator-reflection/1.21/ed5a2bdca04daafac41c53cf82c3b9733fd91e89/jmh-generator-reflection-1.21.jar:/home/frederic/.gradle/caches/modules-2/files-2.1/org.openjdk.jmh/jmh-core/1.21/442447101f63074c61063858033fbfde8a076873/jmh-core-1.21.jar:/home/frederic/.gradle/caches/modules-2/files-2.1/net.sf.jopt-simple/jopt-simple/4.6/306816fb57cf94f108a43c95731b08934dcae15c/jopt-simple-4.6.jar:/home/frederic/.gradle/caches/modules-2/files-2.1/org.apache.commons/commons-math3/3.2/ec2544ab27e110d2d431bdad7d538ed509b21e62/commons-math3-3.2.jar:/home/frederic/.gradle/caches/modules-2/files-2.1/com.google.guava/guava/25.1-jre/6c57e4b22b44e89e548b5c9f70f0c45fe10fb0b4/guava-25.1-jre.jar:/home/frederic/.gradle/caches/modules-2/files-2.1/com.google.code.findbugs/jsr305/3.0.2/25ea2e8b0c338a877313bd4672d3fe056ea78f0d/jsr305-3.0.2.jar:/home/frederic/.gradle/caches/modules-2/files-2.1/org.checkerframework/checker-qual/2.0.0/518929596ee3249127502a8573b2e008e2d51ed3/checker-qual-2.0.0.jar:/home/frederic/.gradle/caches/modules-2/files-2.1/com.google.errorprone/error_prone_annotations/2.1.3/39b109f2cd352b2d71b52a3b5a1a9850e1dc304b/error_prone_annotations-2.1.3.jar:/home/frederic/.gradle/caches/modules-2/files-2.1/com.google.j2objc/j2objc-annotations/1.1/ed28ded51a8b1c6b112568def5f4b455e6809019/j2objc-annotations-1.1.jar:/home/frederic/.gradle/caches/modules-2/files-2.1/org.codehaus.mojo/animal-sniffer-annotations/1.14/775b7e22fb10026eed3f86e8dc556dfafe35f2d5/animal-sniffer-annotations-1.14.jar:/home/frederic/.gradle/caches/modules-2/files-2.1/org.ow2.asm/asm/5.0.3/dcc2193db20e19e1feca8b1240dbbc4e190824fa/asm-5.0.3.jar:/home/frederic/various/dino/benchmarks/build/classes/java/main:/home/frederic/various/dino/benchmarks/build/classes/java/jmh:/home/frederic/various/dino/benchmarks/build/resources/main:/home/frederic/various/dino/benchmarks/build/classes/java/test:/home/frederic/various/dino/benchmarks/build/resources/test:/home/frederic/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-simple/1.7.30/e606eac955f55ecf1d8edcccba04eb8ac98088dd/slf4j-simple-1.7.30.jar:/home/frederic/.gradle/caches/modules-2/files-2.1/org.junit.jupiter/junit-jupiter-api/5.6.0/f29e6318333d2303ce4965c9819cfad08de7d1e5/junit-jupiter-api-5.6.0.jar:/home/frederic/.gradle/caches/modules-2/files-2.1/org.junit.platform/junit-platform-commons/1.6.0/b0a75795cf03841d4f9cc54099557baffc11c727/junit-platform-commons-1.6.0.jar:/home/frederic/.gradle/caches/modules-2/files-2.1/org.assertj/assertj-core/3.15.0/b5b633545f357f576bd0661b302914a3951319d/assertj-core-3.15.0.jar:/home/frederic/.gradle/caches/modules-2/files-2.1/org.apiguardian/apiguardian-api/1.1.0/fc9dff4bb36d627bdc553de77e1f17efd790876c/apiguardian-api-1.1.0.jar:/home/frederic/.gradle/caches/modules-2/files-2.1/org.opentest4j/opentest4j/1.2.0/28c11eb91f9b6d8e200631d46e20a7f407f2a046/opentest4j-1.2.0.jar',
+            '--add-modules', 'jdk.incubator.foreign,jmh.core',
+    ]
+}
+
+dependencies {
+    implementation project(':dino-core'), project(':dino-core-jdk14')
+
+    implementation "org.openjdk.jmh:jmh-core:$jmh_version"
+    implementation 'org.apache.hadoop:hadoop-common:3.2.1'
+    implementation 'com.google.protobuf:protobuf-java:3.11.4'
+}
+
+configurations.all {
+    exclude module: 'kerb-simplekdc'
+    exclude module: 'hadoop-auth'
+    exclude module: 'log4j'
+    exclude module: 'slf4j-log4j12'
+    exclude module: 'stax-api'
+    exclude module: 'javax.servlet-api'
+    exclude module: 'avro'
+    exclude module: 'jackson-databind'
+    exclude module: 'htrace-core4'
+    exclude module: 'dnsjava'
+    exclude module: 'failureaccess'
+}

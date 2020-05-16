@@ -1,0 +1,67 @@
+subprojects {
+    apply plugin: 'java'
+//    apply plugin: 'jacoco'
+
+    repositories {
+        mavenCentral()
+    }
+
+    java {
+        modularity.inferModulePath = true
+    }
+
+    dependencies {
+        implementation "org.slf4j:slf4j-api:$slf4j_version"
+        implementation "org.jetbrains:annotations:$jetbrains_annotations_version"
+
+
+        // import BOM
+        testImplementation platform("org.junit:junit-bom:$junit_bom_version")
+
+        testImplementation 'org.junit.jupiter:junit-jupiter-api'
+        testImplementation "org.assertj:assertj-core:$assertj_version"
+        testImplementation "org.slf4j:slf4j-simple:$slf4j_version"
+
+        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+        // Force Gradle to load the JUnit Platform Launcher from the module-path
+        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    }
+
+    test {
+        useJUnitPlatform()
+        testLogging {
+            events 'passed', 'failed', 'skipped'
+            showStandardStreams = true
+        }
+    }
+
+//    jacoco {
+//        toolVersion = "0.8.5"
+//    }
+//
+//    tasks.withType(Test) {
+//        jacoco.includeNoLocationClasses = true
+//        jacoco.excludes = ['jdk.internal.*']
+//    }
+//
+//    jacocoTestReport {
+//        dependsOn(test)
+//
+//        reports {
+//            html.enabled = true
+//            xml.enabled = true
+//        }
+//    }
+}
+
+// Workaround for https://github.com/researchgate/gradle-release/issues/144
+task build {
+    dependsOn subprojects.findResults { it.tasks.findByName('build') }
+}
+
+// when version changes :
+// -> execute ./gradlew wrapper, then remove .gradle directory, then execute ./gradlew wrapper again
+wrapper {
+    gradleVersion = '6.4'
+    distributionType = Wrapper.DistributionType.ALL
+}
