@@ -9,12 +9,25 @@ Dino will create two threads for each client Socket : one thread for read operat
 [JDK14 foreign memory](http://cr.openjdk.java.net/~mcimadamore/panama/memaccess_javadoc/jdk/incubator/foreign/package-summary.html).
 
 <p align="center">
-<a href="https://ufoss.org/dino/dino.html/">Read Documentation</a>
+<a href="https://ufoss.org/dino/dino.html">Read Documentation</a>
 </p>
 
-## Compile
+## Contributors
 
+Contributions are very welcome.
 To compile Dino project you will need a [Project Loom Early Access JDK](http://jdk.java.net/loom/).
+
+1. Clone this repo
+
+```bash
+git clone git@github.com:ufoss-org/dino.git
+```
+
+2. Build project
+
+```bash
+./gradlew clean buildNeeded
+```
 
 ## Other inspiring libraries
 * [Quasar](https://github.com/puniverse/quasar), loom ancestor on JDK
