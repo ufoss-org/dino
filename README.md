@@ -6,7 +6,7 @@
 Dino will create two threads for each client Socket : one thread for read operations and one thread for write operations.
 * Dino is designed from the start to be used in conjunction with
 [Project Loom virtual threads](https://wiki.openjdk.java.net/display/loom/Main) and
-[JDK14 foreign memory](http://cr.openjdk.java.net/~mcimadamore/panama/memaccess_javadoc/jdk/incubator/foreign/package-summary.html).
+[JDK14 foreign memory](https://cr.openjdk.java.net/~mcimadamore/panama/memaccess_javadoc/jdk/incubator/foreign/package-summary.html).
 
 <p align="center">
 <a href="https://ufoss.org/dino/dino.html">Read Documentation</a>
