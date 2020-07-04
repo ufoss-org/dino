@@ -7,7 +7,7 @@ package org.ufoss.dino.memory;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * This interface represents a contiguous off-heap memory region of size < Long.MAX_VALUE.
+ * This interface represents a contiguous off-heap memory region of size less or equal Long.MAX_VALUE.
  * <p>OffHeap and all of its sub-types offers strong safety :
  * <ul>
  *     <li>All operations make sure that we only access the content of this memory region</li>

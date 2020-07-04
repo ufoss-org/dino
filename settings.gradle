@@ -11,7 +11,7 @@ rootProject.name = 'dino'
 include 'dino-concurrent'
 include 'dino-core'
 include 'dino-core-jdk14'
-include 'dino-core-jdk15'
+//include 'dino-core-jdk15'
 //include 'dino-tcp'
 //include 'dino-transfer'
 

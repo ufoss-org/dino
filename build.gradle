@@ -1,5 +1,13 @@
+plugins {
+    id 'net.researchgate.release'
+}
+
+println("Using Gradle version: $gradle.gradleVersion")
+
 subprojects {
-    apply plugin: 'java'
+    // Regular java modules need 'java-library' plugin for proper publication
+    apply plugin: 'java-library'
+    apply plugin: 'maven-publish'
 //    apply plugin: 'jacoco'
 
     repositories {
@@ -11,12 +19,13 @@ subprojects {
     }
 
     dependencies {
+        // import BOM
+        testImplementation platform("org.junit:junit-bom:$junit_bom_version")
+
+
         implementation "org.slf4j:slf4j-api:$slf4j_version"
         implementation "org.jetbrains:annotations:$jetbrains_annotations_version"
 
-
-        // import BOM
-        testImplementation platform("org.junit:junit-bom:$junit_bom_version")
 
         testImplementation 'org.junit.jupiter:junit-jupiter-api'
         testImplementation "org.assertj:assertj-core:$assertj_version"
@@ -52,6 +61,56 @@ subprojects {
 //            xml.enabled = true
 //        }
 //    }
+
+    // --------------- Source & Javadoc artifacts + publishing ---------------
+
+    javadoc {
+        options.tags = [ "implNote", "implSpec" ]
+    }
+
+    // generate xxx-sources.jar and xxx-javadoc.jar
+    java {
+        withSourcesJar()
+        withJavadocJar()
+    }
+
+    publishing {
+        repositories {
+            maven {
+                def user = 'ufoss'
+                def repo = 'ufoss'
+                def name = 'dino'
+                url = "https://api.bintray.com/maven/$user/$repo/$name/;publish=0"
+
+                credentials {
+                    username = project.hasProperty('bintray_user') ? project.property('bintray_user') : System.getenv('BINTRAY_USER')
+                    password = project.hasProperty('bintray_api_key') ? project.property('bintray_api_key') : System.getenv('BINTRAY_API_KEY')
+                }
+            }
+        }
+
+        publications {
+            maven(MavenPublication) {
+                artifactId = project.name
+                from components.java
+                pom {
+                    name = project.name
+                    description = 'Dino is a IO library based on Project Loom virtual threads and Foreign Memory '
+                    url = 'https://github.com/ufoss-org/dino'
+                    licenses {
+                        license {
+                            name = 'The Unlicence'
+                            url = 'https://unlicense.org'
+                        }
+                    }
+                    scm {
+                        connection = 'scm:git:git://github.com/ufoss-org/dino.git'
+                        url = 'https://github.com/ufoss-org/dino.git'
+                    }
+                }
+            }
+        }
+    }
 }
 
 // Workaround for https://github.com/researchgate/gradle-release/issues/144

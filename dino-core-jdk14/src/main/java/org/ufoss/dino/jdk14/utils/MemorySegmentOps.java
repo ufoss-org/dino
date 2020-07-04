@@ -71,8 +71,8 @@ public final class MemorySegmentOps {
     /**
      * Depending on segment's byteSize, returns :
      * <ul>
-     *     <li>if byteSize < Integer.MAX_VALUE returned ByteBuffer covers this full memory region</li>
-     *     <li>if byteSize > Integer.MAX_VALUE returned ByteBuffer covers first Integer.MAX_VALUE bytes of memory
+     *     <li>if byteSize less or equal than Integer.MAX_VALUE returned ByteBuffer covers this full memory region</li>
+     *     <li>if byteSize greater than Integer.MAX_VALUE returned ByteBuffer covers first Integer.MAX_VALUE bytes of memory
      *     region</li>
      * </ul>
      */
