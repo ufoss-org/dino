@@ -8,8 +8,6 @@ import org.ufoss.dino.transfer.Writer;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.nio.ByteOrder;
-
 import static org.ufoss.dino.internal.BinaryTestData.BYTES_BIG_ENDIAN;
 import static org.ufoss.dino.internal.BinaryTestData.BYTES_LITTLE_ENDIAN;
 import static org.ufoss.dino.internal.BinaryTestData.FIRST_BYTE;
@@ -36,11 +34,10 @@ interface WriterTests {
     @DisplayName("Verify write using Little Endian is working")
     default void writeLE() {
         final var writer = instanciateWriter();
-        writer.setByteOrder(ByteOrder.LITTLE_ENDIAN);
         writer.writeByte(FIRST_BYTE);
-        writer.writeInt(FIRST_INT);
+        writer.writeIntLE(FIRST_INT);
         writer.writeByte(SECOND_BYTE);
-        writer.writeInt(SECOND_INT);
+        writer.writeIntLE(SECOND_INT);
         assertThat(writtenByteArray()).isEqualTo(BYTES_LITTLE_ENDIAN);
     }
 

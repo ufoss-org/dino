@@ -96,16 +96,6 @@ abstract class AbstractByBuArrayData<T extends ByBuOffHeap> extends AbstractData
         return totalLimit;
     }*/
 
-    /**
-     * closes all not null bytes in bytes array
-     */
-    @Override
-    public final void close() {
-        Stream.of(this.bybuArray)
-                .filter(Objects::nonNull)
-                .forEach(ByBuOffHeap::close);
-    }
-
     @Override
     public final long getReadIndex() {
         return this.readIndex;
@@ -114,6 +104,16 @@ abstract class AbstractByBuArrayData<T extends ByBuOffHeap> extends AbstractData
     @Override
     public final long getWriteIndex() {
         return this.writeIndex;
+    }
+
+    /**
+     * closes all not null bytes in bytes array
+     */
+    @Override
+    public final void close() {
+        Stream.of(this.bybuArray)
+                .filter(Objects::nonNull)
+                .forEach(ByBuOffHeap::close);
     }
 
     @Override
@@ -143,7 +143,7 @@ abstract class AbstractByBuArrayData<T extends ByBuOffHeap> extends AbstractData
         }
 
         // 3) memory is exhausted
-        throw new IndexOutOfBoundsException("todo");
+        throw new IndexOutOfBoundsException("Memory is exhausted");
     }
 
     @Override
@@ -171,7 +171,7 @@ abstract class AbstractByBuArrayData<T extends ByBuOffHeap> extends AbstractData
             }
 
             // 3) memory is exhausted
-            throw new IndexOutOfBoundsException("todo");
+            throw new IndexOutOfBoundsException("Memory is exhausted");
         }
 
         // 3) must read some bytes in current byte sequence, some others from next one
@@ -205,7 +205,7 @@ abstract class AbstractByBuArrayData<T extends ByBuOffHeap> extends AbstractData
             }
 
             // 3) memory is exhausted
-            throw new IndexOutOfBoundsException("todo");
+            throw new IndexOutOfBoundsException("Memory is exhausted");
         }
 
         // 3) must read some bytes in current byte sequence, some others from next one
@@ -216,9 +216,8 @@ abstract class AbstractByBuArrayData<T extends ByBuOffHeap> extends AbstractData
 
     @Override
     public byte readByteAt(long index) {
-        if (index < 0 || index > this.writeIndex) {
-            throw new IndexOutOfBoundsException("todo");
-        }
+        indexCheck(index, this.writeIndex, 1);
+
         var currentIndex = 0;
         var limit = 0L;
         while (index > (limit += this.limits[currentIndex])) {
@@ -265,12 +264,12 @@ abstract class AbstractByBuArrayData<T extends ByBuOffHeap> extends AbstractData
     }
 
     /**
-     * Switch to next byte sequence because current one is exhausted
+     * Switch to next ByBuOffHeap because current one is exhausted
      *
-     * @throws IndexOutOfBoundsException if no readable next byte sequence
+     * @throws IndexOutOfBoundsException if no next ByBuOffHeap
      */
     private void nextMemory() {
-        final var nextReadIndex = getNextReadIndex().orElseThrow(() -> new IndexOutOfBoundsException("todo"));
+        final var nextReadIndex = getNextReadIndex().orElseThrow(() -> new IndexOutOfBoundsException("Last Bybu is exhausted"));
         this.memory = Objects.requireNonNull(bybuArray[nextReadIndex]);
         this.currentLimit = limits[nextReadIndex];
     }

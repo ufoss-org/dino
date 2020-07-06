@@ -2,7 +2,7 @@
  * This is free and unencumbered software released into the public domain, following <https://unlicense.org>
  */
 
-package org.ufoss.dino.internal.bytes;
+package org.ufoss.dino.internal.transfer;
 
 import org.ufoss.dino.internal.BinaryTestData;
 import org.junit.jupiter.api.DisplayName;
@@ -12,7 +12,7 @@ import static org.ufoss.dino.internal.BinaryTestData.FIRST_BYTE;
 import static org.ufoss.dino.internal.BinaryTestData.FIRST_INT;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public final class ByteBufferBytesTests implements BytesTests, MutableBytesTests {
+public final class ByteBufferBytesTests implements BybuTests, MutableBybuTests {
 
     @Test
     @DisplayName("Verify read using Big Endian is working")

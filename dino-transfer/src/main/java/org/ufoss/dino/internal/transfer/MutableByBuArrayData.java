@@ -4,9 +4,9 @@
 
 package org.ufoss.dino.internal.transfer;
 
+import org.ufoss.dino.memory.MutableByBuOffHeap;
 import org.ufoss.dino.transfer.MutableData;
 import org.ufoss.dino.transfer.Writer;
-import org.ufoss.dino.internal.bytes.MutableBytes;
 import org.ufoss.dino.utils.BytesOps;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,31 +16,31 @@ import java.util.Objects;
 import java.util.stream.IntStream;
 
 /**
- * Implementation of the mutable {@link MutableData} interface based on a resizable array of {@link MutableBytes}
+ * Implementation of the mutable {@link MutableData} interface based on a resizable array of {@link MutableByBuOffHeap}
  *
  * @implNote Inspired by ArrayList
  * @see ByBuArrayData
  */
-public final class MutableByBuArrayData extends AbstractByBuArrayData<MutableBytes> implements MutableData {
+public final class MutableByBuArrayData extends AbstractByBuArrayData<MutableByBuOffHeap> implements MutableData {
 
     /**
      * The bytes supplier, can act as a pool
      */
-    private final @NotNull MutableMemorySupplier mutableMemorySupplier;
+    private final @NotNull MutableBybuSupplier mutableBybuSupplier;
 
     /**
      * The data writer
      */
     private final @NotNull Writer writer;
 
-    public MutableByBuArrayData(@NotNull MutableMemorySupplier mutableMemorySupplier) {
-        this.mutableMemorySupplier = Objects.requireNonNull(mutableMemorySupplier);
+    public MutableByBuArrayData(@NotNull MutableBybuSupplier mutableBybuSupplier) {
+        this.mutableBybuSupplier = Objects.requireNonNull(mutableBybuSupplier);
 
         // init memories and limits with DEFAULT_CAPACITY size
         this.bybuArray = new MutableBytes[DEFAULT_CAPACITY];
         this.limits = new int[DEFAULT_CAPACITY];
         this.byteSize = 0;
-        this.bybuArray[0] = mutableMemorySupplier.get();
+        this.bybuArray[0] = mutableBybuSupplier.get();
         this.reader = new ReaderImpl();
         this.writer = new WriterImpl();
     }
@@ -51,7 +51,7 @@ public final class MutableByBuArrayData extends AbstractByBuArrayData<MutableByt
     }
 
     /**
-     * Get a new byte sequence from {@link #mutableMemorySupplier}
+     * Get a new byte sequence from {@link #mutableBybuSupplier}
      *
      * @return newly obtained byte sequence
      */
@@ -64,7 +64,7 @@ public final class MutableByBuArrayData extends AbstractByBuArrayData<MutableByt
             this.bybuArray = Arrays.copyOf(bybuArray, newLength);
             this.limits = Arrays.copyOf(limits, newLength);
         }
-        final var bytes = this.mutableMemorySupplier.get();
+        final var bytes = this.mutableBybuSupplier.get();
         this.bybuArray[this.lastWrittenIndex] = bytes;
         return bytes;
     }

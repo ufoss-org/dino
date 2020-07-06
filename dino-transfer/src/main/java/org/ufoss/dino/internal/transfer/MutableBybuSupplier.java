@@ -13,7 +13,7 @@ import java.util.function.Supplier;
 /**
  * A pool of {@link MutableByBuOffHeap}, that allows to recycle and supply memory when needed
  */
-public interface MutableMemorySupplier extends Supplier<MutableByBuOffHeap> {
+public interface MutableBybuSupplier extends Supplier<MutableByBuOffHeap> {
 
     /**
      * @return a {@link MutableByBuOffHeap} from the pool or create new one

@@ -30,13 +30,13 @@ public final class BinaryTestData {
         BYTES_BIG_ENDIAN[0] = FIRST_BYTE;
         BYTES_LITTLE_ENDIAN[0] = FIRST_BYTE;
 
-        final var firstIntBytesBigEndian = BytesOps.intToBytes(FIRST_INT, true);
+        final var firstIntBytesBigEndian = BytesOps.intToBytes(FIRST_INT);
         BYTES_BIG_ENDIAN[1] = firstIntBytesBigEndian[0];
         BYTES_BIG_ENDIAN[2] = firstIntBytesBigEndian[1];
         BYTES_BIG_ENDIAN[3] = firstIntBytesBigEndian[2];
         BYTES_BIG_ENDIAN[4] = firstIntBytesBigEndian[3];
 
-        final var firstIntBytesLittleEndian = BytesOps.intToBytes(FIRST_INT, false);
+        final var firstIntBytesLittleEndian = BytesOps.intToBytesLE(FIRST_INT);
         BYTES_LITTLE_ENDIAN[1] = firstIntBytesLittleEndian[0];
         BYTES_LITTLE_ENDIAN[2] = firstIntBytesLittleEndian[1];
         BYTES_LITTLE_ENDIAN[3] = firstIntBytesLittleEndian[2];
@@ -45,13 +45,13 @@ public final class BinaryTestData {
         BYTES_BIG_ENDIAN[5] = SECOND_BYTE;
         BYTES_LITTLE_ENDIAN[5] = SECOND_BYTE;
 
-        final var secondIntBytesBigEndian = BytesOps.intToBytes(SECOND_INT, true);
+        final var secondIntBytesBigEndian = BytesOps.intToBytes(SECOND_INT);
         BYTES_BIG_ENDIAN[6] = secondIntBytesBigEndian[0];
         BYTES_BIG_ENDIAN[7] = secondIntBytesBigEndian[1];
         BYTES_BIG_ENDIAN[8] = secondIntBytesBigEndian[2];
         BYTES_BIG_ENDIAN[9] = secondIntBytesBigEndian[3];
 
-        final var secondIntBytesLittleEndian = BytesOps.intToBytes(SECOND_INT, false);
+        final var secondIntBytesLittleEndian = BytesOps.intToBytesLE(SECOND_INT);
         BYTES_LITTLE_ENDIAN[6] = secondIntBytesLittleEndian[0];
         BYTES_LITTLE_ENDIAN[7] = secondIntBytesLittleEndian[1];
         BYTES_LITTLE_ENDIAN[8] = secondIntBytesLittleEndian[2];

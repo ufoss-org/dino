@@ -54,10 +54,10 @@ public final class ByBuArrayData extends AbstractByBuArrayData<ByBuOffHeap> {
             if (totalCapacity < DEFAULT_CAPACITY) {
                 totalCapacity = DEFAULT_CAPACITY;
             }
-            this.bybuArray = new Bytes[totalCapacity];
+            this.bybuArray = new ByBuOffHeap[totalCapacity];
             this.bybuArray[0] = bytesData.bybu;
             this.limits = new int[totalCapacity];
-            this.limits[0] = bytesData.limit;
+            this.limits[0] = bytesData.writeIndex;
         } else {
             throw new IllegalArgumentException("data type " + first.getClass().getTypeName() + " is not supported");
         }
@@ -75,12 +75,10 @@ public final class ByBuArrayData extends AbstractByBuArrayData<ByBuOffHeap> {
             } else if (first instanceof ByBuData) {
                 final var bytesData = (ByBuData) data;
                 this.bybuArray[offset] = bytesData.bybu;
-                this.limits[offset] = bytesData.limit;
+                this.limits[offset] = bytesData.writeIndex;
                 offset++;
             }
         }
         this.byteSize = byteSizesSum;
-
-        this.reader = new ReaderImpl();
     }
 }
