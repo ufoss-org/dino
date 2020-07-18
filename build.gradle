@@ -32,8 +32,6 @@ subprojects {
         testImplementation "org.slf4j:slf4j-simple:$slf4j_version"
 
         testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
-        // Force Gradle to load the JUnit Platform Launcher from the module-path
-        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     }
 
     test {
