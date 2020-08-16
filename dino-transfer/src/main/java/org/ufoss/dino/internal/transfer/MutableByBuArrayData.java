@@ -4,13 +4,11 @@
 
 package org.ufoss.dino.internal.transfer;
 
+import org.jetbrains.annotations.NotNull;
 import org.ufoss.dino.memory.MutableByBuOffHeap;
 import org.ufoss.dino.transfer.MutableData;
-import org.ufoss.dino.transfer.Writer;
 import org.ufoss.dino.utils.BytesOps;
-import org.jetbrains.annotations.NotNull;
 
-import java.nio.ByteOrder;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.IntStream;
@@ -98,7 +96,7 @@ public final class MutableByBuArrayData extends AbstractByBuArrayData<MutableByB
         // we are at 0 index in newly obtained byte sequence
 
         if (this.capacity < byteSize) {
-            throw new WriterOverflowException();
+            throw new IndexOutOfBoundsException("Memory is exhausted");
         }
         this.limit = byteSize;
         this.bytes.writeByteAt(currentLimit, value);
@@ -107,7 +105,36 @@ public final class MutableByBuArrayData extends AbstractByBuArrayData<MutableByB
 
     @Override
     public MutableByBuArrayData writeInt(int value) {
-        return null;
+        final var currentLimit = this.limit;
+        final var intSize = 4;
+        final var targetLimit = currentLimit + intSize;
+
+        // 1) at least 4 bytes left to write an int in current byte sequence
+        if (this.capacity >= targetLimit) {
+            this.limit = targetLimit;
+            this.bytes.writeIntAt(currentLimit, value);
+            return this;
+        }
+
+        // 2) current byte sequence is exactly full
+        if (currentLimit == this.capacity) {
+            // let's add a new byte sequence from supplier
+            addNewBytes();
+
+            // we are at 0 index in newly obtained byte sequence
+            if (this.capacity >= intSize) {
+                this.limit = intSize;
+                this.bytes.writeIntAt(currentLimit, value);
+                return this;
+            }
+            throw new IndexOutOfBoundsException("Memory is exhausted");
+        }
+
+        // 3) must write some bytes in current byte sequence, some others in next one
+        for (final var b : BytesOps.intToBytes(value)) {
+            writeByte(b);
+        }
+        return this;
     }
 
     @Override
@@ -132,119 +159,5 @@ public final class MutableByBuArrayData extends AbstractByBuArrayData<MutableByB
         this.bytes = supplyNewBytes();
         this.capacity = this.bytes.getByteSize();
         this.limit = 0;
-    }
-
-    /**
-     * Implementation of the {@code Writer} interface that writes in data array of {@link ByBuArrayData}
-     */
-    private final class WriterImpl implements Writer {
-
-        /**
-         * Current byte sequence to write in
-         */
-        private @NotNull MutableBytes bytes;
-
-        /**
-         * Writing index in the current {@link #bytes}
-         */
-        private int limit = 0;
-
-        /**
-         * Capacity of the current {@link #bytes}
-         */
-        private int capacity;
-
-        boolean isBigEndian = true;
-
-        /**
-         * Current byte sequence is the last not null in the data array of {@code ArrayData}
-         */
-        private WriterImpl() {
-            this.bytes = IntStream.rangeClosed(1, bybuArray.length)
-                    .mapToObj(i -> bybuArray[bybuArray.length - i])
-                    .filter(Objects::nonNull)
-                    .findFirst()
-                    .orElseThrow();
-            this.capacity = this.bytes.getByteSize();
-        }
-
-        @Override
-        public void writeByte(byte value) {
-            final var currentLimit = this.limit;
-            final var byteSize = 1;
-            final var targetLimit = currentLimit + byteSize;
-
-            // 1) at least 1 byte left to write a byte in current byte sequence
-            if (this.capacity >= targetLimit) {
-                this.limit = targetLimit;
-                this.bytes.writeByteAt(currentLimit, value);
-                return;
-            }
-
-            // 2) current byte sequence is exactly full
-            // let's add a new byte sequence from supplier
-            addNewBytes();
-
-            // we are at 0 index in newly obtained byte sequence
-
-            if (this.capacity < byteSize) {
-                throw new WriterOverflowException();
-            }
-            this.limit = byteSize;
-            this.bytes.writeByteAt(currentLimit, value);
-        }
-
-        @Override
-        public void writeInt(int value) {
-            final var currentLimit = this.limit;
-            final var intSize = 4;
-            final var targetLimit = currentLimit + intSize;
-
-            // 1) at least 4 bytes left to write an int in current byte sequence
-            if (this.capacity >= targetLimit) {
-                this.limit = targetLimit;
-                this.bytes.writeIntAt(currentLimit, value);
-                return;
-            }
-
-            // 2) current byte sequence is exactly full
-            if (currentLimit == this.capacity) {
-                // let's add a new byte sequence from supplier
-                addNewBytes();
-
-                // we are at 0 index in newly obtained byte sequence
-                if (this.capacity >= intSize) {
-                    this.limit = intSize;
-                    this.bytes.writeIntAt(currentLimit, value);
-                    return;
-                }
-                throw new WriterOverflowException();
-            }
-
-            // 3) must write some bytes in current byte sequence, some others in next one
-            for (final var b : BytesOps.intToBytes(value, this.isBigEndian)) {
-                writeByte(b);
-            }
-        }
-
-        @Override
-        public final @NotNull ByteOrder getByteOrder() {
-            return byteOrder;
-        }
-
-        @Override
-        public final void setByteOrder(@NotNull ByteOrder byteOrder) {
-            this.isBigEndian = (byteOrder == ByteOrder.BIG_ENDIAN);
-            MutableByBuArrayData.this.setByteOrder(byteOrder);
-        }
-
-        /**
-         * Current byte sequence is full, add a new Bytes in data array
-         */
-        private void addNewBytes() {
-            this.bytes = supplyNewBytes();
-            this.capacity = this.bytes.getByteSize();
-            this.limit = 0;
-        }
     }
 }

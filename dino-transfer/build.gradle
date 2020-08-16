@@ -1,3 +1,5 @@
 dependencies {
     implementation project(':dino-core')
+
+    testImplementation testFixtures(project(':dino-core'))
 }

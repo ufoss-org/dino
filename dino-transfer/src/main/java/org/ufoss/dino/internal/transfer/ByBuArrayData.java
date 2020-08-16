@@ -24,7 +24,6 @@ public final class ByBuArrayData extends AbstractByBuArrayData<ByBuOffHeap> {
 
         // to get total capacity we start with a loop on rest array
         var totalCapacity = 0;
-        // todo use instanceof pattern matching of java 14 https://openjdk.java.net/jeps/305
         for (final var data : rest) {
             if (data instanceof ByBuArrayData) {
                 totalCapacity += ((ByBuArrayData) data).lastWrittenIndex + 1;

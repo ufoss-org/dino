@@ -7,7 +7,6 @@ package org.ufoss.dino.internal.transfer;
 import org.ufoss.dino.transfer.Reader;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.ufoss.dino.internal.BinaryTestData;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

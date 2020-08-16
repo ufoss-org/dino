@@ -4,26 +4,25 @@
 
 package org.ufoss.dino.internal.transfer;
 
-import org.ufoss.dino.internal.BinaryTestData;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.ufoss.dino.fixtures.BinaryTestData;
+import org.ufoss.dino.transfer.Data;
 
-import static org.ufoss.dino.internal.BinaryTestData.FIRST_BYTE;
-import static org.ufoss.dino.internal.BinaryTestData.FIRST_INT;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public final class ByteBufferBytesTests implements BybuTests, MutableBybuTests {
+public final class ByteBufferBytesTests implements DataTests, MutableBybuTests {
 
     @Test
-    @DisplayName("Verify read using Big Endian is working")
-    void readBE() {
-        readBETest(new ByteBufferBytes(BinaryTestData.BYTES_BIG_ENDIAN));
+    @DisplayName("Verify indexed read using Big Endian is working")
+    void readBEIndexed() {
+        readBEIndexedTest(Data.of(BinaryTestData.BYTES_BIG_ENDIAN));
     }
 
     @Test
-    @DisplayName("Verify read using Little Endian is working")
-    void readLE() {
-        readLETest(new ByteBufferBytes(BinaryTestData.BYTES_LITTLE_ENDIAN));
+    @DisplayName("Verify indexed read using Little Endian is working")
+    void readLEIndexed() {
+        readLEIndexedTest(Data.of(BinaryTestData.BYTES_LITTLE_ENDIAN));
     }
 
     @Test

@@ -3,11 +3,10 @@
  */
 
 @SuppressWarnings("module")
-open module dino.core.fixtures {
+open module dino.transfer.test {
     requires org.junit.jupiter.api;
     requires org.assertj.core;
     requires dino.core;
-
-    exports org.ufoss.dino.fixtures;
-    exports org.ufoss.dino.fixtures.memory;
+    requires dino.core.fixtures;
+    requires dino.transfer;
 }
