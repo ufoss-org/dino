@@ -1,6 +1,6 @@
-# &#x1f996; Dino &#x1f995;
+[![License: Unlicense](https://img.shields.io/github/license/ufoss-org/dino)](http://unlicense.org/)
 
-[![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](http://unlicense.org/)
+# &#x1f996; Dino &#x1f995;
 
 * Dino is a IO library that works with one thread per IO operation, for example a multiplexed TCP server that runs with
 Dino will create two threads for each client Socket : one thread for read operations and one thread for write operations.
