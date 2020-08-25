@@ -3,6 +3,6 @@
  */
 
 @SuppressWarnings("module")
-module dino.core.jdk15 {
+module dino.core.jdk16 {
     requires dino.core;
 }
