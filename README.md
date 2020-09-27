@@ -16,7 +16,7 @@ Dino will create two threads for each client Socket : one thread for read operat
 
 Contributions are very welcome.
 
-To compile Dino project you will need a [Project Loom Early Access JDK](http://jdk.java.net/loom/).
+To compile Dino use a [Project Loom Early Access JDK](http://jdk.java.net/loom/).
 
 1. Clone this repo
 
